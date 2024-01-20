@@ -7,3 +7,7 @@
 </p>Since .NET Core 2.0, the framework provides a new interface named IHostedService helping us to easily implement hosted services. The basic idea is that we can define, register multiple background tasks as hosted services where those can be run in the background while your web host or host is running.</p>
 </p>In contrast, BackgroundService was introduced as an extension for long running or concurrent tasks.</p>
 
+## Consider between Host & WebHost
+| Host | WebHost |
+| --- | --- |
+| .NET Core 2.1 and later versions support IHost for background processes with plain console apps. | After ASP.Net MVC, ASP.NET Core 1.x and 2.x support IWebHost for background processes in web apps. | 
