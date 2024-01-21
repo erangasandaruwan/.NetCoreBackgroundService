@@ -208,7 +208,9 @@ namespace HostedService.Lib.BackgroundServices
 
 ExecuteAsync implementation handles the starting and stopping mechanisms, as well as the CancellationToken operation of IHostedService.
 
-One of the critical differences between IHostedService and BackgroundService is that the latter allows you to await a task. Awaiting a task checks if the task is complete. If not, the method pauses and returns to the caller until further notice. The StartAsync method does not have that luxury because the hosted service automatically starts when the application builder becomes active.
+One of the critical differences between IHostedService and BackgroundService is that the latter allows to await a task. Awaiting a task checks if the task is complete. If not, the method pauses and returns to the caller until further notice. The StartAsync method does not have that capability because the hosted service automatically starts when the application builder becomes active.
+
+Another difference is that in the ExecuteAsync method, it require to handle the CancellationToken to stop your method, although it has a default timeout of five seconds. It is possible to modify the timeout period with the ShutdownTimeout property when using Generic Host or Web Host. Furthermore, it is also possible to use the BackgroundService when it is not required to handle the CancellationToken explicitly or want to optimize your code to be shorter.
 
 ---
 
