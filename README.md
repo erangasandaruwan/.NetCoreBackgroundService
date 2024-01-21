@@ -17,6 +17,7 @@
     <summary>
         The relationship between Ihostedservice and BackgroundService
     </summary>
+    The BackgroundService is implemented as abstract class implementing IHostedService interface
     ```
     using System;
     using System.Threading;
