@@ -17,8 +17,6 @@
     <summary>
         The relationship between Ihostedservice and BackgroundService
     </summary>
-    ```
-
     using System;
     using System.Threading;
     using System.Threading.Tasks;
@@ -111,7 +109,6 @@
             }
         }
     }
-    ```
 </details>
 
 #### Consider between Host & WebHost
