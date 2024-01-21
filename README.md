@@ -208,6 +208,8 @@ namespace HostedService.Lib.BackgroundServices
 
 ExecuteAsync implementation handles the starting and stopping mechanisms, as well as the CancellationToken operation of IHostedService.
 
+One of the critical differences between IHostedService and BackgroundService is that the latter allows you to await a task. Awaiting a task checks if the task is complete. If not, the method pauses and returns to the caller until further notice. The StartAsync method does not have that luxury because the hosted service automatically starts when the application builder becomes active.
+
 ---
 
 Configure and inject the services.
@@ -231,3 +233,5 @@ public IServiceProvider ConfigureServices(IServiceCollection services)
 <p>Deploy your ASP.NET Core WebHost or .NET Host might impact the consistance of the solution. For example, if we deploy any solution defined with WebHost on IIS or a regular Azure App Service, the host can be shut down because of app pool recycles. But if it deploy host as a container into an orchestrator like Kubernetes, it is possible to have the control the assured number of live instances of your host to continue serving the functionality continuosly and shut down gracefully. In addition, it could consider other approaches in the cloud especially made for these scenarios, like Azure Functions. Finally, if it required the service to be running all the time and are deploying on a Windows Server it is possible to use Windows Services.</p>
 
 <p>But even for a WebHost deployed into an app pool, there are scenarios like repopulating or flushing application's in-memory cache that would be still applicable. The IHostedService interface provides a convenient way to start background tasks in an ASP.NET Core web application or in host. The main benefit is the opportunity you get with the graceful cancellation to clean-up the code of your background tasks when the host itself is shutting down.</p>
+
+<p>StopAsync ends the background task and is triggered when the application host performs a graceful shutdown. However, if an error or unexpected failure occurs in an application, StopAsync may not be called.</p>
