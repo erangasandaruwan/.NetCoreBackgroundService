@@ -133,7 +133,7 @@ public class Program
 ```
 ### How to configure and use **IhostedService** and **BackgroundService**
 
-First we implement IHostedService
+First we implement **IHostedService**
 1. SampleHostedService Implement the IHostedService interface.
 2. It Initialize a variable called _timer to use in the StartAsync and StopAsync methods from the implemented IHostedInterface. The timer runs the ActionToBePerformed method every five seconds.
 3. The ActionToBePerformed method block contains the code to print “HostedService - Simple service resumed after 5 seconds.”
@@ -173,7 +173,7 @@ namespace HostedService.Lib.HostedService
     }
 }
 ```
-Now we extend BackgroundService
+Now we extend **BackgroundService**
 1. SampleBackgroundService extend the abstract class BackgroundService.
 2. It runs the method ExecuteAsync at the beginig and invoke the method code until it's end. Here it will run in a never ending while loop.
 3. The ExecuteAsync method will sleep a 5 seconds and print “BackgroundService - Simple service resumed after 5 seconds.”
@@ -201,5 +201,25 @@ namespace HostedService.Lib.BackgroundServices
             }
         }
     }
+}
+```
+---
+**NOTE**
+
+ExecuteAsync implementation handles the starting and stopping mechanisms, as well as the CancellationToken operation of IHostedService.
+
+---
+
+Configure and inject the services.
+Inside the project’s startup.cs file, this code will enable the application to recognize and call the background service task.
+```
+public IServiceProvider ConfigureServices(IServiceCollection services)
+{
+    ...
+
+    services.AddHostedService<SampleBackgroundService>();
+    services.AddHostedService<SampleHostedService>();
+
+    return services.BuildServiceProvider();
 }
 ```
