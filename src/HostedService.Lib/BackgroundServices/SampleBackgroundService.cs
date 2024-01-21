@@ -16,6 +16,7 @@ namespace HostedService.Lib.BackgroundServices
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            // Wait here until Kestrel is ready
             if (!await WaitForAppStartup(_applicationLifetime, stoppingToken))
             {
                 return;
