@@ -241,8 +241,8 @@ public IServiceProvider ConfigureServices(IServiceCollection services)
 
 <p>The end result is that we can't rely on Kestrel having started and being available when the IHostedService or BackgroundService runs, so we need a way of waiting for this in our service. The end result is that pit cannot rely on Kestrel having started and being available when your IHostedService or BackgroundService runs, so we need a way of waiting for this in our service.</p>
 
-Finding a solution 
-There's a service available in all ASP.NET Core 3.x applications that can notify as soon as applications have finished starting, and is handling requests which is **IHostApplicationLifetime**. This interface includes 3 properties which can notify you about stages of your application lifecycle, and one method for triggering your application to shut down
+Finding a solution - Waiting for Kestrel to be ready in a background service
+<p>There's a service available in all ASP.NET Core 3.x applications that can notify as soon as applications have finished starting, and is handling requests which is **IHostApplicationLifetime**. This interface includes 3 properties which can notify you about stages of your application lifecycle, and one method for triggering your application to shut down.</p>
 
 ```csharp
 // Licensed to the .NET Foundation under one or more agreements.
@@ -280,7 +280,56 @@ namespace Microsoft.Extensions.Hosting
         void StopApplication();
     }
 }
+```
+Here, this method WaitForAppStartup will help to eliminate the issue while checking the completed tasks was the "IHost or IWebHost start" task, return true, otherwise false.
+```csharp
+using Microsoft.Extensions.Hosting;
 
+namespace HostedService.Lib.BackgroundServices
+{
+    public class SampleBackgroundService : BackgroundService
+    {
+        private readonly ILogger logger = LogManager.GetCurrentClassLogger();
+        private readonly IHostApplicationLifetime _applicationLifetime;
+
+        public SampleBackgroundService(
+            IHostApplicationLifetime applicationLifetime)
+        {
+            _applicationLifetime = applicationLifetime;
+        }
+
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        {
+            // Wait here until Kestrel is ready
+            if (!await WaitForAppStartup(_applicationLifetime, stoppingToken))
+            {
+                return;
+            }
+
+            while (true)
+            {
+                Thread.Sleep(5000);
+                Console.WriteLine("BackgroundService - Simple service resumed after 5 seconds.");
+            }
+        }
+
+        static async Task<bool> WaitForAppStartup(IHostApplicationLifetime lifetime, CancellationToken stoppingToken)
+        {
+            var startedSource = new TaskCompletionSource();
+            var cancelledSource = new TaskCompletionSource();
+
+            using var reg1 = lifetime.ApplicationStarted.Register(() => startedSource.SetResult());
+            using var reg2 = stoppingToken.Register(() => cancelledSource.SetResult());
+
+            Task completedTask = await Task.WhenAny(
+                startedSource.Task,
+                cancelledSource.Task).ConfigureAwait(false);
+
+            // If the completed tasks was the "app started" task, return true, otherwise false
+            return completedTask == startedSource.Task;
+        }
+    }
+}
 ```
 
 ---
