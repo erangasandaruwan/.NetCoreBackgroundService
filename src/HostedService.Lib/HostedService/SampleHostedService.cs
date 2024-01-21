@@ -8,6 +8,7 @@ namespace HostedService.Lib.HostedService
         private Timer _timer = null;
         private readonly IHostApplicationLifetime _applicationLifetime;
         private CancellationToken _cancellationToken;
+        
         public SampleHostedService(IHostApplicationLifetime applicationLifetime)
         {
             _applicationLifetime = applicationLifetime;
