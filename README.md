@@ -227,11 +227,21 @@ public IServiceProvider ConfigureServices(IServiceCollection services)
     return services.BuildServiceProvider();
 }
 ```
-
+---
 <img src="https://github.com/erangasandaruwan/.NetCoreBackgroundService/assets/25504137/51795df3-75a4-4406-a5e6-83daf254844b" width="50"></img>
 #### Problem with IHostedService startup order
 
+<p>In .NET Core 2.x, before the introduction of the generic IHost abstraction, the IHostedService for web applications would start after Kestrel had been fully configured and started listening for requests. The reason IHostedService wasn't suitable for running async startup tasks back then that they started after Kestrel.</p>
 
+<p>In .NET Core 3.0, when ASP.NET Core was re-platformed on top of the generic IHost, things changed. Now Kestrel would run as an IHostedService itself, and it would be started last, after all other IHostedServices. This made IHostedService perfect for the async start tasks, but now we cannot rely on Kestrel being available when our IHostedService runs.</p>
+
+<p>In .NET 6, things changed slightly again with the introduction of the minimal hosting API. With these hosting APIs we can create incredibly terse programs, without Startup classes. Anyway there are some differences around how things are created and started. </p>
+
+<p>From .NET Core 3.x with IHost scenario, in which the hosted services would be started before the it completes the Configure() method was called. Now all the endpoints and middleware are added, and it's only when you call at the end of the Configure() method that all the hosted services are started.</p>
+
+<p>The end result is that we can't rely on Kestrel having started and being available when the IHostedService or BackgroundService runs, so we need a way of waiting for this in our service. The end result is that pit cannot rely on Kestrel having started and being available when your IHostedService or BackgroundService runs, so we need a way of waiting for this in our service.</p>
+
+---
 <img src="https://github.com/erangasandaruwan/.NetCoreBackgroundService/assets/25504137/28d09469-1780-4b29-8062-e161c497e55d" width="120"></img>
 #### Application deployment considerations, shutdown gracefully and no downtime
 
