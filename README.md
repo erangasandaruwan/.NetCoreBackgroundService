@@ -18,7 +18,7 @@
         The relationship between Ihostedservice and BackgroundService
     </summary>
     The BackgroundService is implemented as abstract class implementing IHostedService interface
-    ```
+    ```javascript
     using System;
     using System.Threading;
     using System.Threading.Tasks;
