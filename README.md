@@ -223,7 +223,11 @@ public IServiceProvider ConfigureServices(IServiceCollection services)
     return services.BuildServiceProvider();
 }
 ```
-![image](https://github.com/erangasandaruwan/.NetCoreBackgroundService/assets/25504137/28d09469-1780-4b29-8062-e161c497e55d)
 
+<img src="https://github.com/erangasandaruwan/.NetCoreBackgroundService/assets/25504137/28d09469-1780-4b29-8062-e161c497e55d" width="120">
 
+#### Application deployment considerations, shutdown gracefully and no downtime
 
+<p>Deploy your ASP.NET Core WebHost or .NET Host might impact the consistance of the solution. For example, if we deploy any solution defined with WebHost on IIS or a regular Azure App Service, the host can be shut down because of app pool recycles. But if it deploy host as a container into an orchestrator like Kubernetes, it is possible to have the control the assured number of live instances of your host to continue serving the functionality continuosly and shut down gracefully. In addition, it could consider other approaches in the cloud especially made for these scenarios, like Azure Functions. Finally, if it required the service to be running all the time and are deploying on a Windows Server it is possible to use Windows Services.</p>
+
+<p>But even for a WebHost deployed into an app pool, there are scenarios like repopulating or flushing application's in-memory cache that would be still applicable. The IHostedService interface provides a convenient way to start background tasks in an ASP.NET Core web application or in host. The main benefit is the opportunity you get with the graceful cancellation to clean-up the code of your background tasks when the host itself is shutting down.</p>
