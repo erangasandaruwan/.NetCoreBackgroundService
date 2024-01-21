@@ -174,6 +174,10 @@ namespace HostedService.Lib.HostedService
 }
 ```
 Now we extend BackgroundService
+1. SampleBackgroundService extend the abstract class BackgroundService.
+2. It runs the method ExecuteAsync at the beginig and invoke the method code until it's end. Here it will run in a never ending while loop.
+3. The ExecuteAsync method will sleep a 5 seconds and print “BackgroundService - Simple service resumed after 5 seconds.”
+   
 ```csharp
 ﻿using NLog;
 using Microsoft.Extensions.Hosting;
