@@ -17,8 +17,7 @@
     <summary>
         The relationship between Ihostedservice and BackgroundService
     </summary>
-    ```C#
-    using System;
+    ```using System;
     using System.Threading;
     using System.Threading.Tasks;
     
