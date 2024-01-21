@@ -17,6 +17,7 @@
     <summary>
         The relationship between Ihostedservice and BackgroundService
     </summary>
+    ```C#
     using System;
     using System.Threading;
     using System.Threading.Tasks;
@@ -99,7 +100,6 @@
                     // Do not await the _executeTask because cancelling it will throw an OperationCanceledException which we are explicitly ignoring
                     await Task.WhenAny(_executeTask, tcs.Task).ConfigureAwait(false);
                 }
-    
             }
     
             /// <inheritdoc />
@@ -109,6 +109,7 @@
             }
         }
     }
+    ```
 </details>
 
 #### Consider between Host & WebHost
