@@ -241,7 +241,7 @@ public IServiceProvider ConfigureServices(IServiceCollection services)
 
 <p>The end result is that we can't rely on Kestrel having started and being available when the IHostedService or BackgroundService runs, so we need a way of waiting for this in our service. The end result is that pit cannot rely on Kestrel having started and being available when your IHostedService or BackgroundService runs, so we need a way of waiting for this in our service.</p>
 
-Finding a solution - Waiting for Kestrel to be ready in a background service
+Finding a solution - **Waiting for Kestrel to be ready in a background service**
 <p>There's a service available in all ASP.NET Core 3.x applications that can notify as soon as applications have finished starting, and is handling requests which is **IHostApplicationLifetime**. This interface includes 3 properties which can notify you about stages of your application lifecycle, and one method for triggering your application to shut down.</p>
 
 ```csharp
