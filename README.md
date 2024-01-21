@@ -131,5 +131,71 @@ public class Program
         .UseDefaultServiceProvider(opt => opt.ValidateScopes = false); 
 }
 ```
-### How to register **Ihostedservice** and **BackgroundService**
+### How to configure and use **IhostedService** and **BackgroundService**
 
+First we implement IHostedService
+1. SampleHostedService Implement the IHostedService interface.
+2. It Initialize a variable called _timer to use in the StartAsync and StopAsync methods from the implemented IHostedInterface. The timer runs the ActionToBePerformed method every five seconds.
+3. The ActionToBePerformed method block contains the code to print “HostedService - Simple service resumed after 5 seconds.”
+
+```csharp
+﻿using Microsoft.Extensions.Hosting;
+
+namespace HostedService.Lib.HostedService
+{
+    public class SampleHostedService : IHostedService
+    {
+        private Timer _timer = null;
+        private readonly IHostApplicationLifetime _applicationLifetime;
+        
+        public SampleHostedService(IHostApplicationLifetime applicationLifetime)
+        {
+            _applicationLifetime = applicationLifetime;
+        }
+
+        public Task StartAsync(CancellationToken cancellingToken)
+        {
+            _timer = new Timer(ActionToBePerformed, "HostedService", TimeSpan.Zero, TimeSpan.FromSeconds(5));
+
+            return Task.CompletedTask;
+        }
+
+        public Task StopAsync(CancellationToken cancellingToken)
+        {
+            _timer?.Change(Timeout.Infinite, 0);
+            return Task.CompletedTask;
+        }
+
+        async void ActionToBePerformed(object state)
+        {
+            Console.WriteLine(state.ToString() + " - Simple service resumed after 5 seconds.");
+        }
+    }
+}
+```
+Now we extend BackgroundService
+```csharp
+﻿using NLog;
+using Microsoft.Extensions.Hosting;
+
+namespace HostedService.Lib.BackgroundServices
+{
+    public class SampleBackgroundService : BackgroundService
+    {
+        public SampleBackgroundService(
+            IHostApplicationLifetime applicationLifetime)
+        {
+            _applicationLifetime = applicationLifetime;
+        }
+
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        {
+            while (true)
+            {
+                Thread.Sleep(5000);
+                Console.WriteLine("BackgroundService - Simple service resumed after 5 seconds.");
+            }
+        }
+    }
+}
+```
