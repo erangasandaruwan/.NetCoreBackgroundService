@@ -336,3 +336,7 @@ namespace HostedService.Lib.BackgroundServices
 <p>But even for a WebHost deployed into an app pool, there are scenarios like repopulating or flushing application's in-memory cache that would be still applicable. The IHostedService interface provides a convenient way to start background tasks in an ASP.NET Core web application or in host. The main benefit is the opportunity you get with the graceful cancellation to clean-up the code of your background tasks when the host itself is shutting down.</p>
 
 <p>StopAsync ends the background task and is triggered when the application host performs a graceful shutdown. However, if an error or unexpected failure occurs in an application, StopAsync may not be called.</p>
+
+References 
+- https://learn.microsoft.com/en-us/dotnet/architecture/microservices/multi-container-microservice-net-applications/background-tasks-with-ihostedservice
+- https://andrewlock.net/finding-the-urls-of-an-aspnetcore-app-from-a-hosted-service-in-dotnet-6/
