@@ -212,7 +212,7 @@ ExecuteAsync implementation handles the starting and stopping mechanisms, as wel
 
 Configure and inject the services.
 Inside the project’s startup.cs file, this code will enable the application to recognize and call the background service task.
-```
+```csharp
 public IServiceProvider ConfigureServices(IServiceCollection services)
 {
     ...
