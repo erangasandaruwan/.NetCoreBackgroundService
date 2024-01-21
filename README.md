@@ -228,11 +228,11 @@ public IServiceProvider ConfigureServices(IServiceCollection services)
 }
 ```
 
-<img src="https://github.com/erangasandaruwan/.NetCoreBackgroundService/assets/25504137/51795df3-75a4-4406-a5e6-83daf254844b" width="50">
+<img src="https://github.com/erangasandaruwan/.NetCoreBackgroundService/assets/25504137/51795df3-75a4-4406-a5e6-83daf254844b" width="50"></img>
 #### Problem with IHostedService startup order
 
 
-<img src="https://github.com/erangasandaruwan/.NetCoreBackgroundService/assets/25504137/28d09469-1780-4b29-8062-e161c497e55d" width="120">
+<img src="https://github.com/erangasandaruwan/.NetCoreBackgroundService/assets/25504137/28d09469-1780-4b29-8062-e161c497e55d" width="120"></img>
 #### Application deployment considerations, shutdown gracefully and no downtime
 
 <p>Deploy your ASP.NET Core WebHost or .NET Host might impact the consistance of the solution. For example, if we deploy any solution defined with WebHost on IIS or a regular Azure App Service, the host can be shut down because of app pool recycles. But if it deploy host as a container into an orchestrator like Kubernetes, it is possible to have the control the assured number of live instances of your host to continue serving the functionality continuosly and shut down gracefully. In addition, it could consider other approaches in the cloud especially made for these scenarios, like Azure Functions. Finally, if it required the service to be running all the time and are deploying on a Windows Server it is possible to use Windows Services.</p>
