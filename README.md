@@ -289,7 +289,6 @@ namespace HostedService.Lib.BackgroundServices
 {
     public class SampleBackgroundService : BackgroundService
     {
-        private readonly ILogger logger = LogManager.GetCurrentClassLogger();
         private readonly IHostApplicationLifetime _applicationLifetime;
 
         public SampleBackgroundService(
@@ -306,11 +305,7 @@ namespace HostedService.Lib.BackgroundServices
                 return;
             }
 
-            while (true)
-            {
-                Thread.Sleep(5000);
-                Console.WriteLine("BackgroundService - Simple service resumed after 5 seconds.");
-            }
+            // TODO:
         }
 
         static async Task<bool> WaitForAppStartup(IHostApplicationLifetime lifetime, CancellationToken stoppingToken)
