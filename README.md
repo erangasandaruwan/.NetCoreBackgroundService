@@ -241,6 +241,48 @@ public IServiceProvider ConfigureServices(IServiceCollection services)
 
 <p>The end result is that we can't rely on Kestrel having started and being available when the IHostedService or BackgroundService runs, so we need a way of waiting for this in our service. The end result is that pit cannot rely on Kestrel having started and being available when your IHostedService or BackgroundService runs, so we need a way of waiting for this in our service.</p>
 
+Finding a solution 
+There's a service available in all ASP.NET Core 3.x applications that can notify as soon as applications have finished starting, and is handling requests which is **IHostApplicationLifetime**. This interface includes 3 properties which can notify you about stages of your application lifecycle, and one method for triggering your application to shut down
+
+```csharp
+// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+
+using System.Threading;
+
+namespace Microsoft.Extensions.Hosting
+{
+    /// <summary>
+    /// Allows consumers to be notified of application lifetime events. This interface is not intended to be user-replaceable.
+    /// </summary>
+    public interface IHostApplicationLifetime
+    {
+        /// <summary>
+        /// Triggered when the application host has fully started.
+        /// </summary>
+        CancellationToken ApplicationStarted { get; }
+
+        /// <summary>
+        /// Triggered when the application host is starting a graceful shutdown.
+        /// Shutdown will block until all callbacks registered on this token have completed.
+        /// </summary>
+        CancellationToken ApplicationStopping { get; }
+
+        /// <summary>
+        /// Triggered when the application host has completed a graceful shutdown.
+        /// The application will not exit until all callbacks registered on this token have completed.
+        /// </summary>
+        CancellationToken ApplicationStopped { get; }
+
+        /// <summary>
+        /// Requests termination of the current application.
+        /// </summary>
+        void StopApplication();
+    }
+}
+
+```
+
 ---
 <img src="https://github.com/erangasandaruwan/.NetCoreBackgroundService/assets/25504137/28d09469-1780-4b29-8062-e161c497e55d" width="120"></img>
 #### Application deployment considerations, shutdown gracefully and no downtime
